@@ -1,0 +1,10 @@
+
+{
+  "type":"record",
+  "namespace":"com.interfrontier.kafkarestms.avro",
+  "name":"Hobbit",
+  "fields": [
+      {"name": "quote", "type": {"avro.java.string": "String", "type": "string"}},
+      {"name": "id", "type": "int"}
+  ]
+}

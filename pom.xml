@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.1</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>com.interfrontier</groupId>
+	<artifactId>kafka-rest-ms</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>kafka-rest-ms</name>
+	<description>JD - Test app for Kafka and REST</description>
+
+	<properties>
+		<java.version>17</java.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<!--<dependency>-->
+			<!--<groupId>io.confluent</groupId>-->
+			<!--<artifactId>kafka-schema-registry-maven-plugin</artifactId>-->
+			<!--<version>7.5.1</version>-->
+		<!--</dependency>-->
+
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
+      <version>1.11.3</version>
+    </dependency>
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-avro-serializer</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-streams-avro-serde</artifactId>
+			<version>5.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+			<version>3.6.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro-maven-plugin</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+
+
+		<!--<dependency>-->
+			<!--<groupId>com.google.protobuf</groupId>-->
+			<!--<artifactId>protobuf-java</artifactId>-->
+			<!--<version>4.0.0-rc-2</version>-->
+		<!--</dependency>-->
+		<dependency>
+			<groupId>org.xolstice.maven.plugins</groupId>
+			<artifactId>protobuf-maven-plugin</artifactId>
+			<version>0.6.1</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>3.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>1.0.2</version>
+			<!--<scope>test</scope>-->
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webflux -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+			<version>6.1.3</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>1.11.3</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>io.confluent</groupId>
+				<artifactId>kafka-schema-registry-maven-plugin</artifactId>
+				<version>7.5.1</version>
+				<configuration>
+					<schemaRegistryUrls>
+						<param>http://localhost:8081</param>
+					</schemaRegistryUrls>
+					<subjects>
+						<!--<purchase>src/main/avro/purchase.avsc</purchase>-->
+						<hobbit>src/main/avro/hobbit.avsc</hobbit>
+						<!--<customer>src/main/avro/customer.avsc</customer>-->
+					</subjects>
+					<compatibilityLevels>
+						<hobbit>BACKWARD</hobbit>
+						<!--<product>FORWARD_TRANSITIVE</product>-->
+						<!--<customer>FORWARD</customer>-->
+						<!--<__GLOBAL>BACKWARD_TRANSITIVE</__GLOBAL>-->
+					</compatibilityLevels>
+				<!--</configuration>-->
+				<!--<configuration>-->
+					<schemas>
+						<!--<purchase>src/main/avro/purchase.avsc</purchase>-->
+						<hobbit>src/main/avro/hobbit.avsc</hobbit>
+						<!--<customer>src/main/avro/customer.avsc</customer>-->
+					</schemas>
+					<schemaTypes>
+						<purchase>AVRO</purchase>
+						<!--<product>AVRO</product>-->
+						<!--<customer>AVRO</customer>-->
+					</schemaTypes>
+					<!--<compatibilityLevels>-->
+						<!--<hobbit>BACKWARD</hobbit>-->
+						<!--&lt;!&ndash;<product>FORWARD</product>&ndash;&gt;-->
+						<!--&lt;!&ndash;<customer>NONE</customer>&ndash;&gt;-->
+					<!--</compatibilityLevels>-->
+					<!--<previousSchemaPaths>-->
+						<!--&lt;!&ndash;<purchase>src/main/avro/purchase.avsc</purchase>&ndash;&gt;-->
+						<!--<product>src/main/avro/hobbit.avsc</product>-->
+						<!--&lt;!&ndash;<customer>src/main/avro/customer.avsc</customer>&ndash;&gt;-->
+					<!--</previousSchemaPaths>-->
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>register</goal>
+						</goals>
+					</execution>
+				</executions>
+
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+	<repositories>
+		<repository>
+			<id>confluent</id>
+			<url>https://packages.confluent.io/maven/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>confluent</id>
+			<url>https://packages.confluent.io/maven/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>
